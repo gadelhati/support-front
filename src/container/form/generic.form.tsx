@@ -39,14 +39,17 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         retrieveItem()
     }, [page, size])
     useEffect(()=>{
-        aa()
-    }, [search])
-    const aa = async() => {
-        setKey('ip')
+        searchValue()
+    }, [key, search])
+    const searchValue = async() => {
         await retrieve(object.url, page, size, key, search).then((data: any) => {
             startTransition(() => setPageable(data))
             startTransition(() => setStates(data.content))
         }).catch(() => { networkError() })
+    }
+    const searchKey = (ikey: string) => {
+        setSearch('')
+        setKey(ikey)
     }
     const searchItem = async (event: ChangeEvent<HTMLInputElement>) => {
         setSearch(event.target.value)
@@ -269,7 +272,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                     {/* <option value={15}>15</option> */}
                                 </select>
                         </TitleHeader>
-                        {object.url.includes('host') && <input name={search} onChange={searchItem} placeholder='search by IP'></input>}
+                        <input name={search} onChange={searchItem} placeholder={`${key}`} value={search}></input>
                         {!object.url.includes('istoric') && <Button onClick={newItem}>New</Button>}
                     </Header>
                     {ispending && <Load></Load>}
@@ -280,7 +283,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                     console.log(value)
                                     if (key !== 'id' && key !== 'password' && index < 7 && key !== 'role') {
                                         if(!object.url.includes('weather') || index < 6) {
-                                            return (<th>{key}</th>)
+                                            return (<th onClick={()=>searchKey(key)}>{key}</th>)
                                         }
                                     }
                                 })}
