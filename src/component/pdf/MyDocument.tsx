@@ -1,4 +1,3 @@
-import React from 'react';
 import { Page, Text, View, Image, Link, Document, StyleSheet } from '@react-pdf/renderer';
 import logo from './image/marinha.png'
 
@@ -30,17 +29,17 @@ const styles = StyleSheet.create({
     }
 });
 
-const MyDocument = () => (
+export const MyDocument = () => (
     <Document>
         <Page size="A4" style={styles.page}>
             <View>
                 <Image src={logo} style={styles.image} />
             </View>
             <View>
-                <Link target='_blank' src='https://www.makeuseof.com/react-create-pdf-documents/' style={styles.link}>Click Me</Link>
+                <Link src='https://www.makeuseof.com/react-create-pdf-documents/' style={styles.link}>Click Me</Link>
             </View>
             <View>
-                <Link target='_blank' src='https://react-pdf.org' style={styles.link}>Documentation</Link>
+                <Link src='https://react-pdf.org' style={styles.link}>Documentation</Link>
             </View>
             <View style={styles.section}>
                 <Text>Section #1</Text>

@@ -15,8 +15,8 @@ import { AuthProvider } from "./component/auth/auth.provider";
 import { initialOM } from "./component/om/om.initial";
 import { Home } from "./container/form/home";
 import { initialHost } from "./component/host/host.initial";
-import ReactPDF, { PDFViewer } from '@react-pdf/renderer';
-import MyDocument from "./assets/MyDocument";
+import ReactPDF, { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import MyDocument from "./component/pdf/MyDocument";
 
 const ROLES = {
     'USER': "ROLE_USER",
@@ -48,11 +48,16 @@ export default function AppRoutes() {
                                 <Route path="/host" element={<GenericForm key='host' object={initialHost} url={'host'} />}></Route>
                             </Route>
                             <Route path="/pdf" element={
-                                <PDFViewer>
-                                    <MyDocument />
-                                </PDFViewer>
-                                // ReactPDF.render(<MyDocument />, `${__dirname}/example.pdf`);
-                                // ReactPDF.renderToStream(<MyDocument />)
+                                // <PDFViewer>
+                                //     <MyDocument />
+                                // </PDFViewer>
+                                <div>
+                                    <PDFDownloadLink document={<MyDocument />} fileName="somename.pdf">
+                                        {({ blob, url, loading, error }) =>
+                                            loading ? 'Loading document...' : 'Download now!'
+                                        }
+                                    </PDFDownloadLink>
+                                </div>
                             }></Route>
                         </Routes>
                     </FlexCointainer>
