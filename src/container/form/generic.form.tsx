@@ -142,7 +142,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         }).catch(() => { networkError() })
     }
     const handleInputChangeSubSelectArray = async (event: ChangeEvent<HTMLSelectElement>) => {
-        await retrieve(event.target.name, page, size, 'id', event.target.value).then((data: any) => {
+        await retrieve(event.target.name, 0, size, 'id', event.target.value).then((data: any) => {
             setState({ ...state, [event.target.name]: [data?.content[0]] })
         }).catch(() => { networkError() })
     }
@@ -224,7 +224,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                                                                 <option value={value} selected>{value === null ? '' : value?.name ? value.name : value.id}</option>
                                                                                 {subStates[index]?.map(((result: any) => <option placeholder={key} value={result.id}>{result?.name ? result.name : result.id}</option>))}
                                                                             </select>
-                                                                            <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
+                                                                                                                                                        <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
                                                                         </>
                                                                     :
                                                                     atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index]?.worth === 0 || value === null && atribute[index]?.worth === '' || atribute[index]?.type !== 'undefined' ?
