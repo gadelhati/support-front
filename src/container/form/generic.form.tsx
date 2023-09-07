@@ -220,11 +220,11 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                                                         </>
                                                                         :
                                                                         <>
-                                                                            <select name={key} onChange={handleInputChangeSubSelectArray} defaultValue={value}>
-                                                                                <option value={value} selected>{value === null ? '' : value?.name ? value.name : value.id}</option>
+                                                                            <select name={key} onChange={handleInputChangeSubSelectArray} defaultValue={value[0]} value={value[0]}>
+                                                                                <option value={value[0]} selected>{value === null ? '' : value[0]?.name ? value[0].name : value[0].id}</option>
                                                                                 {subStates[index]?.map(((result: any) => <option placeholder={key} value={result.id}>{result?.name ? result.name : result.id}</option>))}
                                                                             </select>
-                                                                                                                                                        <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
+                                                                            <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
                                                                         </>
                                                                     :
                                                                     atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index]?.worth === 0 || value === null && atribute[index]?.worth === '' || atribute[index]?.type !== 'undefined' ?
