@@ -21,6 +21,7 @@ import { UriScreenFormat } from '../../service/uri.format'
 // import { ShineButton } from './shine.button'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { PDFDocument } from '../../component/pdf/PDFDocument'
+import { Input } from './input/Input'
 
 export const GenericForm = <T extends { id: string, name: string }>(object: any) => {
     const [state, setState] = useState<any>(object.object)
@@ -90,16 +91,16 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         }).catch(() => { networkError() })
     }
     const loadSubStates = async () => {
-    Object.entries(state).map(([key, value], index) => {
-    return (
-    !(atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index].worth === 0 || value === null && atribute[index].worth === '' || atribute[index]?.type !== 'undefined' && !Array.isArray(atribute[index]?.worth)) &&
-    retrieve(key, 0, 1000, '', '').then((data: any) => {
-    startTransition(() => {
-    subStates[index] = data.content
-    setSubStates(subStates)
-    })
-    }).catch(() => { networkError() })
-    )
+        Object.entries(state).map(([key, value], index) => {
+            return (
+                !(atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index].worth === 0 || value === null && atribute[index].worth === '' || atribute[index]?.type !== 'undefined' && !Array.isArray(atribute[index]?.worth)) &&
+                retrieve(key, 0, 1000, '', '').then((data: any) => {
+                    startTransition(() => {
+                        subStates[index] = data.content
+                        setSubStates(subStates)
+                    })
+                }).catch(() => { networkError() })
+            )
         })
     }
     const updateItem = async () => {
@@ -118,13 +119,13 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
             }).catch(() => { networkError() })
         }
     }
-    const validation = (name: string): string[] => {
-        let vector: string[] = []
-        if(Array.isArray(error)){
-            error?.map((element: any) => { if (name == element.field) return vector.push(element?.message+'. ') })
-        }
-        return vector
-    }
+    // const validation = (name: string): string[] => {
+    //     let vector: string[] = []
+    //     if(Array.isArray(error)){
+    //         error?.map((element: any) => { if (name == element.field) return vector.push(element?.message+'. ') })
+    //     }
+    //     return vector
+    // }
     const validationDTO = (): string[] => {
         let vector: string[] = []
         if(Array.isArray(error)){
@@ -132,20 +133,20 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         }
         return vector
     }
-    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
-        setState({ ...state, [event.target.name]: value })
-    }
-    const handleInputChangeSubSelect = async (event: ChangeEvent<HTMLSelectElement>) => {
-        await retrieve(event.target.name, page, size, event.target.name, event.target.value).then((data: any) => {
-            setState({ ...state, [event.target.name]: data?.content[0] })
-        }).catch(() => { networkError() })
-    }
-    const handleInputChangeSubSelectArray = async (event: ChangeEvent<HTMLSelectElement>) => {
-        await retrieve(event.target.name, 0, size, 'id', event.target.value).then((data: any) => {
-            setState({ ...state, [event.target.name]: [data?.content[0]] })
-        }).catch(() => { networkError() })
-    }
+    // const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
+    //     setState({ ...state, [event.target.name]: value })
+    // }
+    // const handleInputChangeSubSelect = async (event: ChangeEvent<HTMLSelectElement>) => {
+    //     await retrieve(event.target.name, page, size, event.target.name, event.target.value).then((data: any) => {
+    //         setState({ ...state, [event.target.name]: data?.content[0] })
+    //     }).catch(() => { networkError() })
+    // }
+    // const handleInputChangeSubSelectArray = async (event: ChangeEvent<HTMLSelectElement>) => {
+    //     await retrieve(event.target.name, 0, size, 'id', event.target.value).then((data: any) => {
+    //         setState({ ...state, [event.target.name]: [data?.content[0]] })
+    //     }).catch(() => { networkError() })
+    // }
     const handlePage = (page: number) => {
         setPage(page)
     }
@@ -161,10 +162,10 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         resetItem()
         loadSubStates()
     }
-    const removeTimeFromDate = (date: any) => {
-        let aux = new Date(date)
-        return new Date(aux.getFullYear(), aux.getMonth() + 1, aux.getDate()).toLocaleDateString('fr-CA');
-    }
+    // const removeTimeFromDate = (date: any) => {
+    //     let aux = new Date(date)
+    //     return new Date(aux.getFullYear(), aux.getMonth() + 1, aux.getDate()).toLocaleDateString('fr-CA');
+    // }
     const showObject = (values: any): any => {
         return (
             Object.entries(values).map(([key, value]: any, index) => {
@@ -208,44 +209,45 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                     <Container>
                                         {Object.entries(state).map(([key, value]: any, index) => {
                                             return (
-                                                <div style={atribute[index]?.type === 'hidden' ? { display: 'none' } : { display: 'flex' }}>
-                                                        <ContainerInput error={validation(key).length !== 0 ? true : false} historic={object.url.includes('istoric') || object.url.includes('weather') ? true : false}>
-                                                            <span>
-                                                                {Array.isArray(atribute[index]?.worth) ?
-                                                                    atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index]?.worth === 0 || value === null && atribute[index]?.worth === '' || value !== null && typeof value !== 'object' ?
-                                                                        <>
-                                                                            <input type={atribute[index]?.type} name={key} required value={atribute[index]?.type === 'date' ? removeTimeFromDate(value) : value} onChange={handleInputChange} autoComplete='off' readOnly={object.url.includes('istoric') ? true : false} />
-                                                                            <label htmlFor={key} hidden={atribute[index]?.type === 'hidden' || atribute[index]?.type === 'checkbox' ? true : false} >{key}</label>
-                                                                            <label htmlFor={key}>{validation(key)}</label>
-                                                                        </>
-                                                                        :
-                                                                        <>
-                                                                            <select name={key} onChange={handleInputChangeSubSelectArray} defaultValue={value}>
-                                                                                <option value={value} selected>{value === null ? '' : value?.name ? value.name : value.id}</option>
-                                                                                {subStates[index]?.map(((result: any) => <option placeholder={key} value={result.id}>{result?.name ? result.name : result.id}</option>))}
-                                                                            </select>
-                                                                                                                                                        <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
-                                                                        </>
-                                                                    :
-                                                                    atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index]?.worth === 0 || value === null && atribute[index]?.worth === '' || atribute[index]?.type !== 'undefined' ?
-                                                                        <>
-                                                                            <input type={atribute[index]?.type} name={key} required value={atribute[index]?.type === 'date' ? removeTimeFromDate(value) : value} onChange={handleInputChange} autoComplete='off' readOnly={object.url.includes('istoric') ? true : false} />
-                                                                            <label htmlFor={key} hidden={atribute[index]?.type === 'hidden' || atribute[index]?.type === 'checkbox' ? true : false} >{key}</label>
-                                                                            <label htmlFor={key}>{validation(key)}</label>
-                                                                        </>
-                                                                        :
-                                                                        <>
-                                                                            <select name={key} onChange={handleInputChangeSubSelect} defaultValue={value}>
-                                                                                <option value={value} selected>{value === null || value === undefined ? '' : value?.name ? value.name : value.id}</option>
-                                                                                {subStates[index]?.map(((result: any) => <option placeholder={key} value={result.id}>{result?.name ? result.name : result.id}</option>))}
-                                                                            </select>
-                                                                            <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
-                                                                            <label htmlFor={key}>{validation(key)}</label>
-                                                                        </>
-                                                                }
-                                                            </span>
-                                                        </ContainerInput>
-                                                </div>
+                                                // <div style={atribute[index]?.type === 'hidden' ? { display: 'none' } : { display: 'flex' }}>
+                                                //         <ContainerInput error={validation(key).length !== 0 ? true : false} historic={object.url.includes('istoric') || object.url.includes('weather') ? true : false}>
+                                                //             <span>
+                                                //                 {Array.isArray(atribute[index]?.worth) ?
+                                                //                     atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index]?.worth === 0 || value === null && atribute[index]?.worth === '' || value !== null && typeof value !== 'object' ?
+                                                //                         <>
+                                                //                             <input type={atribute[index]?.type} name={key} required value={atribute[index]?.type === 'date' ? removeTimeFromDate(value) : value} onChange={handleInputChange} autoComplete='off' readOnly={object.url.includes('istoric') ? true : false} />
+                                                //                             <label htmlFor={key} hidden={atribute[index]?.type === 'hidden' || atribute[index]?.type === 'checkbox' ? true : false} >{key}</label>
+                                                //                             <label htmlFor={key}>{validation(key)}</label>
+                                                //                         </>
+                                                //                         :
+                                                //                         <>
+                                                //                             <select name={key} onChange={handleInputChangeSubSelectArray} defaultValue={value}>
+                                                //                                 <option value={value} selected>{value === null ? '' : value?.name ? value.name : value.id}</option>
+                                                //                                 {subStates[index]?.map(((result: any) => <option placeholder={key} value={result.id}>{result?.name ? result.name : result.id}</option>))}
+                                                //                             </select>
+                                                //                             <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
+                                                //                         </>
+                                                //                     :
+                                                //                     atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index]?.worth === 0 || value === null && atribute[index]?.worth === '' || atribute[index]?.type !== 'undefined' ?
+                                                //                         <>
+                                                //                             <input type={atribute[index]?.type} name={key} required value={atribute[index]?.type === 'date' ? removeTimeFromDate(value) : value} onChange={handleInputChange} autoComplete='off' readOnly={object.url.includes('istoric') ? true : false} />
+                                                //                             <label htmlFor={key} hidden={atribute[index]?.type === 'hidden' || atribute[index]?.type === 'checkbox' ? true : false} >{key}</label>
+                                                //                             <label htmlFor={key}>{validation(key)}</label>
+                                                //                         </>
+                                                //                         :
+                                                //                         <>
+                                                //                             <select name={key} onChange={handleInputChangeSubSelect} defaultValue={value}>
+                                                //                                 <option value={value} selected>{value === null || value === undefined ? '' : value?.name ? value.name : value.id}</option>
+                                                //                                 {subStates[index]?.map(((result: any) => <option placeholder={key} value={result.id}>{result?.name ? result.name : result.id}</option>))}
+                                                //                             </select>
+                                                //                             <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
+                                                //                             <label htmlFor={key}>{validation(key)}</label>
+                                                //                         </>
+                                                //                 }
+                                                //             </span>
+                                                //         </ContainerInput>
+                                                // </div>
+                                                <Input type={atribute[index]?.type} name={key} value={value} object={value} readOnly={false} show={modal}></Input>
                                             )
                                         })}
                                     </Container>
