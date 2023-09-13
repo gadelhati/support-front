@@ -209,6 +209,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                     <Container>
                                         {Object.entries(state).map(([key, value]: any, index) => {
                                             return (
+                                                <Input type={atribute[index]?.type} name={key} value={value} object={value} readOnly={false} show={modal}></Input>
                                                 // <div style={atribute[index]?.type === 'hidden' ? { display: 'none' } : { display: 'flex' }}>
                                                 //         <ContainerInput error={validation(key).length !== 0 ? true : false} historic={object.url.includes('istoric') || object.url.includes('weather') ? true : false}>
                                                 //             <span>
@@ -221,8 +222,8 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                                 //                         </>
                                                 //                         :
                                                 //                         <>
-                                                //                             <select name={key} onChange={handleInputChangeSubSelectArray} defaultValue={value}>
-                                                //                                 <option value={value} selected>{value === null ? '' : value?.name ? value.name : value.id}</option>
+                                                //                             <select name={key} onChange={handleInputChangeSubSelectArray} defaultValue={value[0]} value={value[0]}>
+                                                //                                 <option value={value[0]} selected>{value === null ? '' : value[0]?.name ? value[0].name : value[0].id}</option>
                                                 //                                 {subStates[index]?.map(((result: any) => <option placeholder={key} value={result.id}>{result?.name ? result.name : result.id}</option>))}
                                                 //                             </select>
                                                 //                             <label className='label' htmlFor={key} hidden={atribute[index]?.type === 'hidden' ? true : false}>{key}</label>
@@ -247,7 +248,6 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                                 //             </span>
                                                 //         </ContainerInput>
                                                 // </div>
-                                                <Input type={atribute[index]?.type} name={key} value={value} object={value} readOnly={false} show={modal}></Input>
                                             )
                                         })}
                                     </Container>
