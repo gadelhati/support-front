@@ -1,12 +1,12 @@
 import { useState, ChangeEvent, useEffect, useTransition } from 'react'
 import { ErrorMessage } from 'src/assets/error/errorMessage'
 import { initialErrorMessage } from 'src/assets/error/errorMessage.initial'
-import { InputInterface } from './input.interface'
+import { InputInterface } from './assets/input.interface'
 import { retrieve } from 'src/service/service.crud'
 import { SubAtributeSet } from 'src/component/atribute/subAtribute'
-import { SetAtributes } from './setAtributes'
-import { initialInput } from './input.initial'
-import './input.scss'
+import { SetAtributes } from './assets/setAtributes'
+import { initialInput } from './assets/input.initial'
+import './assets/input.scss'
 
 export const Input = (object: InputInterface) => {
     const [state, setState] = useState<InputInterface>(initialInput)
@@ -61,10 +61,15 @@ export const Input = (object: InputInterface) => {
         <span>
             {/* {state.type === 'checkbox' || state.type === 'date' || state.value === null && state.type === 'number' || state.value === null && state.type === 'string' || state.type !== 'undefined' ? */}
             { !Array.isArray(state.value) ?
-                <input type={state.type} name={state.name} required defaultValue={state.type === 'date' ? removeTimeFromDate(state.value) : state.value} value={state.value} onChange={handleInputChange} autoComplete='off' readOnly={state.readOnly} />
+                <input type={state.type} name={state.name} required
+                    defaultChecked={typeof state.value === 'boolean' ? state.value : undefined}
+                    defaultValue={typeof state.value === 'boolean' ? undefined : state.type === 'date' ? removeTimeFromDate(state.value) : state.value}
+                    value={typeof state.value === 'boolean' ? undefined : state.value}
+                    onChange={handleInputChange} autoComplete='off' readOnly={state.readOnly} />
                 :
-                <select name={state.name} onChange={Array.isArray(state.object)?handleInputChangeSubSelectArray:handleInputChangeSubSelect} defaultValue={state.value[0]} >
-                    <option value={state.value[0]} selected>{state.value === null || state.value === undefined ? '' : state.value[0].name ? state.value[0].name : state.value[0].id}</option>
+                <select name={state.name} onChange={Array.isArray(state.value)?handleInputChangeSubSelectArray:handleInputChangeSubSelect}
+                    defaultValue={typeof state.value[0] === 'boolean' ? undefined : state.type === 'date' ? removeTimeFromDate(state.value[0]) : state.value[0]}>
+                    <option value={state.value[0]} selected>{state.value[0] === null || state.value[0] === undefined ? '' : state.value[0]?.name ? state.value[0]?.name : state.value[0]?.id}</option>
                     {subStates?.map(((result: any) => <option value={result.id}>{result?.name ? result.name : result.id}</option>))}
                 </select>
             }
