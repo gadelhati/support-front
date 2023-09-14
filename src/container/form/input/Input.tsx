@@ -28,7 +28,6 @@ export const Input = (object: InputInterface) => {
         return vector
     }
     const loadSubStates = async () => {
-        // !(object.type === 'checkbox' || object.type === 'date' || object.type !== 'undefined') &&
         Array.isArray(object.value) &&
             retrieve(object.name, 0, 1000, '', '').then((data: any) => {
                 startTransition(() => {
@@ -43,6 +42,9 @@ export const Input = (object: InputInterface) => {
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         setState({ ...state, value: value })
+    }
+    const updateFather = () => {
+        object.childToParent(state)
     }
     const handleInputChangeSubSelect = async (event: ChangeEvent<HTMLSelectElement>) => {
         await retrieve(event.target.name, page, size, event.target.name, event.target.value).then((data: any) => {
@@ -60,18 +62,18 @@ export const Input = (object: InputInterface) => {
     return (
         <span>
             {/* {state.type === 'checkbox' || state.type === 'date' || state.value === null && state.type === 'number' || state.value === null && state.type === 'string' || state.type !== 'undefined' ? */}
-            { !Array.isArray(state.value) ?
-                <input type={state.type} name={state.name} required
-                    defaultChecked={typeof state.value === 'boolean' ? state.value : undefined}
-                    defaultValue={typeof state.value === 'boolean' ? undefined : state.type === 'date' ? removeTimeFromDate(state.value) : state.value}
-                    value={typeof state.value === 'boolean' ? undefined : state.value}
-                    onChange={handleInputChange} autoComplete='off' readOnly={state.readOnly} />
-                :
-                <select name={state.name} onChange={Array.isArray(state.value)?handleInputChangeSubSelectArray:handleInputChangeSubSelect}
-                    defaultValue={typeof state.value[0] === 'boolean' ? undefined : state.type === 'date' ? removeTimeFromDate(state.value[0]) : state.value[0]}>
-                    <option value={state.value[0]} selected>{state.value[0] === null || state.value[0] === undefined ? '' : state.value[0]?.name ? state.value[0]?.name : state.value[0]?.id}</option>
-                    {subStates?.map(((result: any) => <option value={result.id}>{result?.name ? result.name : result.id}</option>))}
+            { Array.isArray(state.value) ?
+                <select key={Math.random()} name={state.name} onBlur={updateFather} onChange={Array.isArray(state.value) ? handleInputChangeSubSelectArray : handleInputChangeSubSelect}
+                    // defaultValue={typeof state.value[0] === 'boolean' ? undefined : state.type === 'date' ? removeTimeFromDate(state.value[0]) : state.value[0]}
+                    value={state.value[0]}>
+                    <option selected key={Math.random()} value={state.value[0]}>{state.value[0].hasOwnProperty('name') ? state.value[0]?.name : state.value[0]?.id}</option>
+                    {subStates?.map(((result: any) => <option key={Math.random()} value={result.id}>{result?.name ? result.name : result.id}</option>))}
                 </select>
+                :
+                <input key={state.name} name={state.name} onBlur={updateFather} onChange={handleInputChange} autoComplete='off' readOnly={state.readOnly} required type={state.type}
+                    // defaultValue={typeof state.value === 'boolean' ? undefined : state.type === 'date' ? removeTimeFromDate(state.value) : state.value}    
+                    defaultChecked={typeof state.value === 'boolean' ? state.value : undefined}
+                    value={typeof state.value === 'boolean' ? undefined : state.value} />
             }
             <label htmlFor={state.name} hidden={state.type === 'hidden' || state.type === 'checkbox' ? true : false} >{state.name}</label>
             <label htmlFor={state.name}>{validation(state.name)}</label>

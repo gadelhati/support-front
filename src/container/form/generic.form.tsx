@@ -22,6 +22,7 @@ import { UriScreenFormat } from '../../service/uri.format'
 import { PDFDownloadLink } from '@react-pdf/renderer'
 import { PDFDocument } from '../../component/pdf/PDFDocument'
 import { Input } from './input/Input'
+import { InputInterface } from './input/assets/input.interface'
 
 export const GenericForm = <T extends { id: string, name: string }>(object: any) => {
     const [state, setState] = useState<any>(object.object)
@@ -36,6 +37,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
     const [modal, setModal] = useState<boolean>(false)
     const [key, setKey] = useState<string>('')
     const [search, setSearch] = useState<string>('')
+    const [data, setData] = useState('')
 
     useEffect(() => {
         setAtribute(AtributeSet(object.object))
@@ -57,12 +59,12 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         setSearch(event.target.value)
     }
     const resetItem = () => {
-        loadSubStates()
+        // loadSubStates()
         setState(object.object)
         setError([initialErrorMessage])
     }
     const selectItem = async (data: any) => {
-        loadSubStates()
+        // loadSubStates()
         setState(data)
         handleModal()
     }
@@ -90,19 +92,19 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
             startTransition(() => setStates(data.content))
         }).catch(() => { networkError() })
     }
-    const loadSubStates = async () => {
-        Object.entries(state).map(([key, value], index) => {
-            return (
-                !(atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index].worth === 0 || value === null && atribute[index].worth === '' || atribute[index]?.type !== 'undefined' && !Array.isArray(atribute[index]?.worth)) &&
-                retrieve(key, 0, 1000, '', '').then((data: any) => {
-                    startTransition(() => {
-                        subStates[index] = data.content
-                        setSubStates(subStates)
-                    })
-                }).catch(() => { networkError() })
-            )
-        })
-    }
+    // const loadSubStates = async () => {
+    //     Object.entries(state).map(([key, value], index) => {
+    //         return (
+    //             !(atribute[index]?.type === 'checkbox' || atribute[index]?.type === 'date' || value === null && atribute[index].worth === 0 || value === null && atribute[index].worth === '' || atribute[index]?.type !== 'undefined' && !Array.isArray(atribute[index]?.worth)) &&
+    //             retrieve(key, 0, 1000, '', '').then((data: any) => {
+    //                 startTransition(() => {
+    //                     subStates[index] = data.content
+    //                     setSubStates(subStates)
+    //                 })
+    //             }).catch(() => { networkError() })
+    //         )
+    //     })
+    // }
     const updateItem = async () => {
         await update(object.url, state).then((data) => {
             validItem(data)
@@ -133,10 +135,10 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         }
         return vector
     }
-    // const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    //     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value
-    //     setState({ ...state, [event.target.name]: value })
-    // }
+    const handleInputChangeFather = (object: InputInterface) => {
+        setState({ ...state, [object.name]: object.value })
+        console.log('pai', 'name: ', object.name, ', value: ', object.value)
+    }
     // const handleInputChangeSubSelect = async (event: ChangeEvent<HTMLSelectElement>) => {
     //     await retrieve(event.target.name, page, size, event.target.name, event.target.value).then((data: any) => {
     //         setState({ ...state, [event.target.name]: data?.content[0] })
@@ -160,7 +162,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
     const newItem = () => {
         setModal(!modal)
         resetItem()
-        loadSubStates()
+        // loadSubStates()
     }
     // const removeTimeFromDate = (date: any) => {
     //     let aux = new Date(date)
@@ -170,7 +172,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
         return (
             Object.entries(values).map(([key, value]: any, index) => {
                 if (key !== 'id' && key !== 'password' && index < 7 && key !== 'role') {
-                    return (<td>
+                    return (<td key={Math.random()}>
                         {Array.isArray(value) ?
                             <>
                                 {value.map((key) => {
@@ -196,6 +198,9 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
     //     button?.style.setProperty("--x", event.clientX - button?.getBoundingClientRect().x)
     //     button?.style.setProperty("--y", event.clientY - button?.getBoundingClientRect().y)
     // }
+    // const childToParent = (childdata: any) => {
+    //     setData(childdata);
+    // }
     return (
         <>
             {/* <ShineButton onMouseMove={shine} className='shiny'>Shine Button</ShineButton> */}
@@ -206,10 +211,11 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                             <header><span onClick={handleModal}>&times;</span><h2>{UriScreenFormat(object.url)}</h2></header>
                             {atribute &&
                                 <>
-                                    <Container>
+                                    <Container key={Math.random()}>
                                         {Object.entries(state).map(([key, value]: any, index) => {
                                             return (
-                                                <Input type={atribute[index]?.type} name={key} value={value} readOnly={false} show={modal}></Input>
+                                                // <p  key={Math.random()}></p>
+                                                <Input childToParent={handleInputChangeFather} key={Math.random()} type={atribute[index]?.type} name={key} value={value} readOnly={false} show={modal}></Input>
                                                 // <div style={atribute[index]?.type === 'hidden' ? { display: 'none' } : { display: 'flex' }}>
                                                 //         <ContainerInput error={validation(key).length !== 0 ? true : false} historic={object.url.includes('istoric') || object.url.includes('weather') ? true : false}>
                                                 //             <span>
@@ -289,7 +295,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                 {Object.entries(state).map(([key, value]: any, index) => {
                                     if (key !== 'id' && key !== 'password' && index < 7 && key !== 'role') {
                                         if(!object.url.includes('weather') || index < 6) {
-                                            return (<th onClick={()=>searchKey(key)}>{key}</th>)
+                                            return (<th key={Math.random()} onClick={()=>searchKey(key)}>{key}</th>)
                                         }
                                     }
                                 })}
@@ -299,7 +305,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                             <tbody>
                                 {states.map((element) => {
                                     return (
-                                        <tr onClick={() => selectItem(element)}>
+                                        <tr key={Math.random()} onClick={() => selectItem(element)}>
                                             <>{showObject(element)}</>
                                         </tr>)
                                 })}

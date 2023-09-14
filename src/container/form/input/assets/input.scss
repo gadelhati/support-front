@@ -1,5 +1,14 @@
 @import 'variables.scss';
 
+// div {
+//     display: 'flex';
+//     min-height: '6rem';
+//     justify-content: 'center';
+//     align-items: 'center';
+//     flex-wrap: 'wrap';
+//     padding: '$space-lg';
+// }
+
 input[type=checkbox] {
 
     +label,
@@ -36,6 +45,7 @@ select {
     text-overflow: ellipsis ellipsis;
 
     +label {
+        width: 7rem;
         pointer-events: none;
         text-transform: uppercase;
         display: inline-block;
@@ -111,51 +121,30 @@ select:active {
     }
 }
 
-variants {
-    historic {
-        true {
+// .error {
+//     input,
+//     select {
+//         color: $color-tenth;
+//         background: $color-danger;
+//     }
+//     input:focus,
+//     input:active,
+//     select:focus,
+//     select:active {
+//         +label+label {
+//             height: 4rem;
+//             background: $color-danger;
+//             display: inline-block;
+//             z-index: 1;
+//         }
+//     }
+// }
 
-            input,
-            select {
-                width: 10em;
-
-                +label {
-                    width: 8em;
-                }
-            }
-        }
-
-        false {
-
-            input,
-            select {
-                +label {
-                    width: 7rem;
-                }
-            }
-        }
-    }
-
-    error {
-        true {
-
-            input,
-            select {
-                color: $color-tenth;
-                background: $color-danger;
-            }
-
-            input:focus,
-            input:active,
-            select:focus,
-            select:active {
-                +label+label {
-                    height: 4rem;
-                    background: $color-danger;
-                    display: inline-block;
-                    z-index: 1;
-                }
-            }
-        }
-    }
-}
+// .historic {
+//     input, select {
+//         width: 10em;
+//         +label {
+//             width: 8em;
+//         }
+//     }
+// }
