@@ -209,7 +209,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                     <Container>
                                         {Object.entries(state).map(([key, value]: any, index) => {
                                             return (
-                                                <Input type={atribute[index]?.type} name={key} value={value} object={value} readOnly={false} show={modal}></Input>
+                                                <Input type={atribute[index]?.type} name={key} value={value} readOnly={false} show={modal}></Input>
                                                 // <div style={atribute[index]?.type === 'hidden' ? { display: 'none' } : { display: 'flex' }}>
                                                 //         <ContainerInput error={validation(key).length !== 0 ? true : false} historic={object.url.includes('istoric') || object.url.includes('weather') ? true : false}>
                                                 //             <span>
