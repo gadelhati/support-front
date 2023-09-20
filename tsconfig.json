@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "paths": {
-      "src/*": ["./src/*"],
-    },
+    // "paths": {
+    //   "src/*": ["./src/*"],
+    // },
     "target": "ESNext",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "module": "ESNext",
