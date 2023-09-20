@@ -4,9 +4,9 @@ import { getAccessToken } from "../../service/service.token"
 // const token = getAccessToken();
 
 export const api = axios.create({
-  baseURL: "http://localhost:3597/support",
+  // baseURL: "http://localhost:3597/support",
   // baseURL: "http://localhost:8080/support",
-  // baseURL: "https://10.5.193.20/support",
+  baseURL: "https://10.5.193.20/support",
   // headers: { 'content-type': 'application/json' }
 });
 

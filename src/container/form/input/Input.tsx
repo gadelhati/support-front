@@ -9,14 +9,13 @@ import { initialInput } from './assets/input.initial'
 import './assets/input.scss'
 
 export const Input = (object: InputInterface) => {
-    const [state, setState] = useState<InputInterface>(initialInput)
+    const [state, setState] = useState<any>(initialInput)
     const [subStates, setSubStates] = useState<Object[]>(SubAtributeSet(state))
     const [error, setError] = useState<ErrorMessage[]>([initialErrorMessage])
-    const [page, setPage] = useState<number>(0)
-    const [size, setSize] = useState<number>(5)
     const [ispending, startTransition] = useTransition()
 
     useEffect(() => {
+        {JSON.stringify(ispending)}
         setState(SetAtributes(object))
         loadSubStates()
     }, [object.show])
@@ -35,10 +34,10 @@ export const Input = (object: InputInterface) => {
                 })
             }).catch(() => { networkError() })
     }
-    const removeTimeFromDate = (date: any) => {
-        let aux = new Date(date)
-        return new Date(aux.getFullYear(), aux.getMonth() + 1, aux.getDate()).toLocaleDateString('fr-CA');
-    }
+    // const removeTimeFromDate = (date: any) => {
+    //     let aux = new Date(date)
+    //     return new Date(aux.getFullYear(), aux.getMonth() + 1, aux.getDate()).toLocaleDateString('fr-CA');
+    // }
     const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
         const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
         setState({ ...state, value: value })
@@ -47,12 +46,12 @@ export const Input = (object: InputInterface) => {
         object.childToParent(state)
     }
     const handleInputChangeSubSelect = async (event: ChangeEvent<HTMLSelectElement>) => {
-        await retrieve(event.target.name, page, size, event.target.name, event.target.value).then((data: any) => {
+        await retrieve(event.target.name, 0, 1000, event.target.name, event.target.value).then((data: any) => {
             setState({ ...state, value: data?.content[0] })
         }).catch(() => { networkError() })
     }
     const handleInputChangeSubSelectArray = async (event: ChangeEvent<HTMLSelectElement>) => {
-        await retrieve(event.target.name, 0, size, 'id', event.target.value).then((data: any) => {
+        await retrieve(event.target.name, 0, 1000, 'id', event.target.value).then((data: any) => {
             setState({ ...state, value: [data?.content[0]] })
         }).catch(() => { networkError() })
     }

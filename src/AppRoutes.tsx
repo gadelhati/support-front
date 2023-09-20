@@ -15,7 +15,7 @@ import { AuthProvider } from "./component/auth/auth.provider";
 import { initialOM } from "./component/om/om.initial";
 import { Home } from "./container/form/home";
 import { initialHost } from "./component/host/host.initial";
-import ReactPDF, { PDFViewer, PDFDownloadLink } from '@react-pdf/renderer';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 import { PDFDocument } from "./component/pdf/PDFDocument";
 
 const ROLES = {
@@ -53,7 +53,7 @@ export default function AppRoutes() {
                                 // </PDFViewer>
                                 <div>
                                     <PDFDownloadLink document={<PDFDocument />} fileName="somename.pdf">
-                                        {({ blob, url, loading, error }) =>
+                                        {({ loading }) =>
                                             loading ? 'Loading document...' : 'Download now!'
                                         }
                                     </PDFDownloadLink>

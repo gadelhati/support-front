@@ -3,7 +3,7 @@ import { isValidToken } from '../../service/service.token'
 import { ErrorMessage } from '../../assets/error/errorMessage'
 import { initialErrorMessage } from '../../assets/error/errorMessage.initial'
 import { create, update, remove, retrieve, removeComposite } from '../../service/service.crud'
-import { Container, ContainerInput } from './generic.field'
+import { Container } from './generic.field'
 import { AtributeSet } from './generic.atribute'
 import { Atribute } from '../../component/atribute/atribute.interface'
 import { Table } from '../template/table'
@@ -14,7 +14,7 @@ import { ErrorBoundary } from 'react-error-boundary'
 import { Modal } from '../template/modal'
 import { Toast } from '../toast/toast'
 import { createToast, toastDetails } from '../toast/toast.message'
-import { SubAtributeSet } from '../../component/atribute/subAtribute'
+// import { SubAtributeSet } from '../../component/atribute/subAtribute'
 import { Header, TitleHeader } from '../template/header'
 // import { Load } from '../template/load'
 import { UriScreenFormat } from '../../service/uri.format'
@@ -27,7 +27,7 @@ import { InputInterface } from './input/assets/input.interface'
 export const GenericForm = <T extends { id: string, name: string }>(object: any) => {
     const [state, setState] = useState<any>(object.object)
     const [states, setStates] = useState<T[]>([object.object])
-    const [subStates, setSubStates] = useState<Object[][]>(SubAtributeSet(state))
+    // const [subStates, setSubStates] = useState<Object[][]>(SubAtributeSet(state))
     const [error, setError] = useState<ErrorMessage[]>([initialErrorMessage])
     const [atribute, setAtribute] = useState<Atribute[]>(AtributeSet(object.object))
     const [page, setPage] = useState<number>(0)
@@ -37,9 +37,10 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
     const [modal, setModal] = useState<boolean>(false)
     const [key, setKey] = useState<string>('')
     const [search, setSearch] = useState<string>('')
-    const [data, setData] = useState('')
+    // const [data, setData] = useState('')
 
     useEffect(() => {
+        {JSON.stringify(ispending)}
         setAtribute(AtributeSet(object.object))
         retrieveItem()
     }, [page, size])
@@ -263,7 +264,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                                     <Container hidden={object.url.includes('istoric') ? true : false} >
                                         {modal &&
                                         <PDFDownloadLink document={<PDFDocument object={state} />} fileName="somename.pdf">
-                                                {({ blob, url, loading, error }) => loading ? <Button category={'warning'} >Wait</Button> : <Button category={'secondary'} >Download</Button> }
+                                                {({ loading }) => loading ? <Button category={'warning'} >Wait</Button> : <Button category={'secondary'} >Download</Button> }
                                         </PDFDownloadLink>}
                                         <Button type='reset' category={'secondary'} onClick={resetItem}>Reset</Button>
                                         <Button category={'success'} onClick={createItem} hidden={state.id !== "" && !object.url.includes('istoric') || object.url.includes('istoric') ? true : false}>Create</Button>
@@ -292,7 +293,7 @@ export const GenericForm = <T extends { id: string, name: string }>(object: any)
                     <Table>
                         <thead>
                             <tr>
-                                {Object.entries(state).map(([key, value]: any, index) => {
+                                {Object.entries(state).map(([key]: any, index) => {
                                     if (key !== 'id' && key !== 'password' && index < 7 && key !== 'role') {
                                         if(!object.url.includes('weather') || index < 6) {
                                             return (<th key={Math.random()} onClick={()=>searchKey(key)}>{key}</th>)
